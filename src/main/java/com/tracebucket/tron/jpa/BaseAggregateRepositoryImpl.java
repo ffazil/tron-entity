@@ -94,7 +94,7 @@ public class BaseAggregateRepositoryImpl<T extends BaseAggregate, ID extends Ser
      */
     @Override
     public void delete(ID id, String tenantId) {
-        List<T> result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.owner.organizationUID = '" + tenantId +"' and a.aggregateId.aggregateId = '"+ id + "'")
+        List<T> result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId +"' and a.aggregateId.aggregateId = '"+ id + "'")
                 .getResultList();
         if(result != null && result.size() == 1) {
             T entity = result.get(0);
@@ -113,7 +113,7 @@ public class BaseAggregateRepositoryImpl<T extends BaseAggregate, ID extends Ser
      */
     @Override
     public T findOne(ID id, String tenantId) {
-        List<T> result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.owner.organizationUID = '" + tenantId +"' and a.aggregateId.aggregateId = '"+ id + "' and a.passive = false")
+        List<T> result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId +"' and a.aggregateId.aggregateId = '"+ id + "' and a.passive = false")
                 .getResultList();
         if(result != null && result.size() == 1) {
             return result.get(0);
@@ -128,7 +128,7 @@ public class BaseAggregateRepositoryImpl<T extends BaseAggregate, ID extends Ser
      */
     @Override
     public List<T> findAll(String tenantId) {
-        return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.owner.organizationUID = '" + tenantId + "' and a.passive = false")
+        return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.passive = false")
                 .getResultList();
     }
 }
