@@ -95,8 +95,14 @@ public class BaseEntityRepositoryImpl<T extends BaseEntity, ID extends Serializa
      */
     @Override
     public void delete(ID id, String tenantId) {
-        List<T> result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.owner.organizationUID = '" + tenantId +"' and a.aggregateId.aggregateId = '"+ id + "'")
-                .getResultList();
+        List<T> result = null;
+        if(tenantId != null) {
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.entityId.entityId = '" + id + "'")
+                    .getResultList();
+        } else {
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.entityId.entityId = '" + id + "'")
+                    .getResultList();
+        }
         if(result != null && result.size() == 1) {
             T entity = result.get(0);
             if(entity != null) {
@@ -114,8 +120,14 @@ public class BaseEntityRepositoryImpl<T extends BaseEntity, ID extends Serializa
      */
     @Override
     public T findOne(ID id, String tenantId) {
-        List<T> result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.owner.organizationUID = '" + tenantId +"' and a.aggregateId.aggregateId = '"+ id + "' and a.passive = false")
-                .getResultList();
+        List<T> result = null;
+        if(tenantId != null) {
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.entityId.entityId = '" + id + "' and a.passive = false")
+                    .getResultList();
+        } else {
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.entityId.entityId = '" + id + "' and a.passive = false")
+                    .getResultList();
+        }
         if(result != null && result.size() == 1) {
             return result.get(0);
         }
@@ -129,7 +141,15 @@ public class BaseEntityRepositoryImpl<T extends BaseEntity, ID extends Serializa
      */
     @Override
     public List<T> findAll(String tenantId) {
-        return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.owner.organizationUID = '" + tenantId + "' and a.passive = false")
-                .getResultList();
+        if(tenantId != null) {
+            return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.passive = false")
+                    .getResultList();
+        } else {
+            return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.passive = false")
+                    .getResultList();
+        }
     }
+
+
+
 }

@@ -25,10 +25,15 @@ public abstract class BaseEntity implements Serializable{
     private boolean passive;
 
     public BaseEntity(){
+        this.entityId = EntityId.generate();
     }
 
     public EntityId getEntityId() {
         return entityId;
+    }
+
+    public void setEntityId(EntityId entityId) {
+        this.entityId = entityId;
     }
 
     public Long getVersion() {

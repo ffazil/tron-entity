@@ -24,10 +24,15 @@ public abstract class BaseAggregate implements Serializable{
     private boolean passive;
 
     public BaseAggregate(){
+        this.aggregateId = AggregateId.generate();
     }
 
     public AggregateId getAggregateId() {
         return aggregateId;
+    }
+
+    public void setAggregateId(AggregateId aggregateId) {
+        this.aggregateId = aggregateId;
     }
 
     public Long getVersion() {
