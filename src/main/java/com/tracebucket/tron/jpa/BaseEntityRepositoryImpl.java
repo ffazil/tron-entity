@@ -1,6 +1,5 @@
 package com.tracebucket.tron.jpa;
 
-import com.tracebucket.tron.domain.BaseAggregate;
 import com.tracebucket.tron.domain.BaseEntity;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -11,8 +10,7 @@ import org.springframework.util.Assert;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 
 /**
@@ -97,10 +95,10 @@ public class BaseEntityRepositoryImpl<T extends BaseEntity, ID extends Serializa
     public void delete(ID id, String tenantId) {
         List<T> result = null;
         if(tenantId != null) {
-            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.entityId.entityId = '" + id + "'")
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.uid = '" + tenantId + "' and a.uid = '" + id + "'")
                     .getResultList();
         } else {
-            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.entityId.entityId = '" + id + "'")
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.uid = '" + id + "'")
                     .getResultList();
         }
         if(result != null && result.size() == 1) {
@@ -122,10 +120,10 @@ public class BaseEntityRepositoryImpl<T extends BaseEntity, ID extends Serializa
     public T findOne(ID id, String tenantId) {
         List<T> result = null;
         if(tenantId != null) {
-            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.entityId.entityId = '" + id + "' and a.passive = false")
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.uid = '" + tenantId + "' and a.uid = '" + id + "' and a.passive = false")
                     .getResultList();
         } else {
-            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.entityId.entityId = '" + id + "' and a.passive = false")
+            result = entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.uid = '" + id + "' and a.passive = false")
                     .getResultList();
         }
         if(result != null && result.size() == 1) {
@@ -142,7 +140,7 @@ public class BaseEntityRepositoryImpl<T extends BaseEntity, ID extends Serializa
     @Override
     public List<T> findAll(String tenantId) {
         if(tenantId != null) {
-            return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.passive = false")
+            return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.uid = '" + tenantId + "' and a.passive = false")
                     .getResultList();
         } else {
             return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.passive = false")

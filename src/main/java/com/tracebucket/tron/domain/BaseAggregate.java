@@ -1,7 +1,8 @@
 package com.tracebucket.tron.domain;
 
+
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * @author ffl
@@ -9,12 +10,12 @@ import java.io.Serializable;
  * @version 0.1
  */
 @MappedSuperclass
-public abstract class BaseAggregate implements Serializable{
-
-	@EmbeddedId
-	@AttributeOverrides({
-		  @AttributeOverride(name = "aggregateId", column = @Column(name = "ID", nullable = false))})
-	protected AggregateId aggregateId;
+public abstract class BaseAggregate {
+    @Id
+/*    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")*/
+    @Column(name = "UID")
+    protected String uid;
 
 	@Version
 	private Long version;
@@ -23,16 +24,20 @@ public abstract class BaseAggregate implements Serializable{
     @Basic(fetch = FetchType.EAGER)
     private boolean passive;
 
-    public BaseAggregate(){
-        this.aggregateId = AggregateId.generate();
+    public BaseAggregate() {
+        uid = UUID.randomUUID().toString();
     }
 
-    public AggregateId getAggregateId() {
-        return aggregateId;
+    public BaseAggregate(String uid) {
+        this.uid = uid;
     }
 
-    public void setAggregateId(AggregateId aggregateId) {
-        this.aggregateId = aggregateId;
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public Long getVersion() {
@@ -52,9 +57,9 @@ public abstract class BaseAggregate implements Serializable{
     }
 
     @PrePersist
-    public void initAggregateId() {
-        if(this.aggregateId == null) {
-            this.aggregateId = AggregateId.generate();
+    public void prePersist() {
+        if(this.uid == null) {
+            uid = UUID.randomUUID().toString();
         }
     }
 }

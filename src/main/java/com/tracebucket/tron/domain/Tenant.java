@@ -5,29 +5,24 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 
-/**
- * Created by ffl on 22-01-2015.
- * This is Organization in the partner bounded context.
- */
 @Embeddable
 public class Tenant {
     @Column(name = "TENANT__ID")
     @Basic(fetch = FetchType.EAGER)
-    private String tenantUid;
+    private String uid;
 
     public Tenant() {
-
     }
 
-    public Tenant(String tenantUid) {
-        this.tenantUid = tenantUid;
+    public Tenant(String uid) {
+        this.uid = uid;
     }
 
-    public String getTenantUid() {
-        return tenantUid;
+    public String getUid() {
+        return uid;
     }
 
-    public void setTenantUid(String tenantUid) {
-        this.tenantUid = tenantUid;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

@@ -1,6 +1,6 @@
 package com.tracebucket.tron.domain;
 
-import java.io.Serializable;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -16,12 +16,13 @@ import javax.persistence.*;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable{
+public abstract class BaseEntity {
 
-    @EmbeddedId
-    @AttributeOverrides({
-            @AttributeOverride(name = "entityId", column = @Column(name = "ID", nullable = false))})
-    protected EntityId entityId;
+    @Id
+/*    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")*/
+    @Column(name = "UID")
+    protected String uid;
 
     @JsonIgnore
     @Version
@@ -32,16 +33,20 @@ public abstract class BaseEntity implements Serializable{
     @Basic(fetch = FetchType.EAGER)
     private boolean passive;
 
-    public BaseEntity(){
-        this.entityId = EntityId.generate();
+    public BaseEntity() {
+        uid = UUID.randomUUID().toString();
     }
 
-    public EntityId getEntityId() {
-        return entityId;
+    public BaseEntity(String uid) {
+        this.uid = uid;
     }
 
-    public void setEntityId(EntityId entityId) {
-        this.entityId = entityId;
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public Long getVersion() {
@@ -61,9 +66,9 @@ public abstract class BaseEntity implements Serializable{
     }
 
     @PrePersist
-    public void initEntityId() {
-        if(this.entityId == null) {
-            this.entityId = EntityId.generate();
+    public void prePersist() {
+        if(this.uid == null) {
+            uid = UUID.randomUUID().toString();
         }
     }
 }
