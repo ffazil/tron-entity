@@ -34,7 +34,7 @@ public abstract class BaseEntity {
     private boolean passive;
 
     public BaseEntity() {
-        uid = UUID.randomUUID().toString();
+        //uid = UUID.randomUUID().toString();
     }
 
     public BaseEntity(String uid) {
