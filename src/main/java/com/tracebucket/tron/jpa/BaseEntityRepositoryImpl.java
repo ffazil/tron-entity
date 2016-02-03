@@ -69,7 +69,9 @@ public class BaseEntityRepositoryImpl<T extends BaseEntity, ID extends Serializa
 
     @Override
     public List<T> findAll() {
-        return super.findAll();
+        //return super.findAll();
+        return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.passive = false")
+                .getResultList();
     }
 
     @Transactional

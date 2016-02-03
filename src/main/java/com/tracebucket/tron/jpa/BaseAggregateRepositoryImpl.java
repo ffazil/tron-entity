@@ -128,7 +128,7 @@ public class BaseAggregateRepositoryImpl<T extends BaseAggregate, ID extends Ser
      */
     @Override
     public List<T> findAll(String tenantId) {
-        return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.tenantUid = '" + tenantId + "' and a.passive = false")
+        return entityManager.createQuery("Select a from " + entityInformation.getEntityName() + " a where a.tenant.uid = '" + tenantId + "' and a.passive = false")
                 .getResultList();
     }
 }
